@@ -1,0 +1,21 @@
+name: GitHub Issue 452
+
+on:
+  push:
+    branches: [ github/issue-452 ]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Execute test
+        run: dotnet test --filter="DotNet.Testcontainers.ResourceReaper.Tests.GitHub.Issue452"
