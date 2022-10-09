@@ -9,7 +9,7 @@ namespace DotNet.Testcontainers.Builders
   using DotNet.Testcontainers.Configurations.Credentials;
 
   /// <inheritdoc cref="IDockerRegistryAuthenticationProvider" />
-  internal sealed class TlsEndpointAuthenticationProvider : DockerEndpointAuthenticationProvider
+  internal class TlsEndpointAuthenticationProvider : DockerEndpointAuthenticationProvider
   {
     private const string DefaultUserDockerFolderName = ".docker";
     private const string DefaultCaCertFileName = "ca.pem";
@@ -17,7 +17,6 @@ namespace DotNet.Testcontainers.Builders
     private static readonly string DefaultCertPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), DefaultUserDockerFolderName);
 
     private readonly Lazy<X509Certificate2> caCertificate;
-    private readonly Uri dockerEngine;
     private readonly bool dockerTlsEnabled;
 
     /// <summary>
@@ -34,19 +33,27 @@ namespace DotNet.Testcontainers.Builders
     /// <param name="customConfigurations">A list of custom configurations.</param>
     public TlsEndpointAuthenticationProvider(params ICustomConfiguration[] customConfigurations)
     {
-      var dockerCertPath = customConfigurations
+      this.DockerCertPath = customConfigurations
         .Select(customConfiguration => customConfiguration.GetDockerCertPath())
         .FirstOrDefault(value => value != null) ?? DefaultCertPath;
-      var dockerCaCertFile = Path.Combine(dockerCertPath, DefaultCaCertFileName);
-
-      this.dockerEngine = customConfigurations
+      this.DockerEngine = customConfigurations
         .Select(customConfiguration => customConfiguration.GetDockerHost())
         .FirstOrDefault(value => value != null) ?? DefaultTlsDockerEndpoint;
       this.dockerTlsEnabled = customConfigurations
         .Select(customConfiguration => customConfiguration.GetDockerTls())
         .Aggregate(false, (x, y) => x || y);
-      this.caCertificate = new Lazy<X509Certificate2>(() => new X509Certificate2(dockerCaCertFile));
+      this.caCertificate = new Lazy<X509Certificate2>(() => new X509Certificate2(Path.Combine(this.DockerCertPath, DefaultCaCertFileName)));
     }
+
+    /// <summary>
+    ///   Gets path to the docker certificate folder.
+    /// </summary>
+    protected string DockerCertPath { get; }
+
+    /// <summary>
+    /// Gets URI to the docker engine.
+    /// </summary>
+    protected Uri DockerEngine { get; }
 
     /// <inheritdoc />
     public override bool IsApplicable()
@@ -57,10 +64,10 @@ namespace DotNet.Testcontainers.Builders
     /// <inheritdoc />
     public override IDockerEndpointAuthenticationConfiguration GetAuthConfig()
     {
-      return new DockerEndpointAuthenticationConfiguration(this.dockerEngine, new TlsCredentials(this.ServerCertificateValidationCallback));
+      return new DockerEndpointAuthenticationConfiguration(this.DockerEngine, new TlsCredentials(this.ServerCertificateValidationCallback));
     }
 
-    private bool ServerCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+    protected bool ServerCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
     {
       switch (sslPolicyErrors)
       {

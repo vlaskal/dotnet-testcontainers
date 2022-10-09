@@ -38,6 +38,11 @@ namespace DotNet.Testcontainers.Tests.Unit
         var defaultConfiguration = new PropertiesFileConfiguration(Array.Empty<string>());
         var dockerHostConfiguration = new PropertiesFileConfiguration(new[] { $"docker.host={DockerHost}" });
         var dockerTlsConfiguration = new PropertiesFileConfiguration(new[] { "docker.tls=true" });
+        var dockerMTlsConfiguration = new PropertiesFileConfiguration(new[] { "docker.tls.verify=true" });
+        this.Add(new object[] { new MTlsEndpointAuthenticationProvider(defaultConfiguration), false });
+        this.Add(new object[] { new MTlsEndpointAuthenticationProvider(dockerMTlsConfiguration), true });
+        this.Add(new object[] { new MTlsEndpointAuthenticationProvider(Array.Empty<ICustomConfiguration>()), false });
+        this.Add(new object[] { new MTlsEndpointAuthenticationProvider(defaultConfiguration, dockerMTlsConfiguration), true });
         this.Add(new object[] { new TlsEndpointAuthenticationProvider(defaultConfiguration), false });
         this.Add(new object[] { new TlsEndpointAuthenticationProvider(dockerTlsConfiguration), true });
         this.Add(new object[] { new TlsEndpointAuthenticationProvider(Array.Empty<ICustomConfiguration>()), false });

@@ -23,6 +23,7 @@ namespace DotNet.Testcontainers.Configurations
     private static readonly IDockerEndpointAuthenticationConfiguration DockerEndpointAuthConfig =
       new IDockerEndpointAuthenticationProvider[]
         {
+          new MTlsEndpointAuthenticationProvider(),
           new TlsEndpointAuthenticationProvider(),
           new EnvironmentEndpointAuthenticationProvider(),
           new NpipeEndpointAuthenticationProvider(),
