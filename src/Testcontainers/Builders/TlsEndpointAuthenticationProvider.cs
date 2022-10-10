@@ -6,7 +6,6 @@ namespace DotNet.Testcontainers.Builders
   using System.Net.Security;
   using System.Security.Cryptography.X509Certificates;
   using DotNet.Testcontainers.Configurations;
-  using DotNet.Testcontainers.Configurations.Credentials;
 
   /// <inheritdoc cref="IDockerRegistryAuthenticationProvider" />
   internal class TlsEndpointAuthenticationProvider : DockerEndpointAuthenticationProvider

@@ -10,6 +10,7 @@ namespace DotNet.Testcontainers.Tests.Unit
   public sealed class DockerEndpointAuthenticationProviderTest
   {
     private const string DockerHost = "tcp://127.0.0.1:2375";
+
     private const string DockerTlsHost = "tcp://127.0.0.1:2376";
 
     [Theory]

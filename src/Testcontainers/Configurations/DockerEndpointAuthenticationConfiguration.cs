@@ -13,14 +13,14 @@
     /// </summary>
     /// <param name="endpoint">The Docker API endpoint.</param>
     /// <param name="credentials">The Docker API authentication credentials.</param>
-    public DockerEndpointAuthenticationConfiguration(Uri endpoint, Docker.DotNet.Credentials credentials = null)
+    public DockerEndpointAuthenticationConfiguration(Uri endpoint, Credentials credentials = null)
     {
       this.Credentials = credentials;
       this.Endpoint = endpoint;
     }
 
     /// <inheritdoc />
-    public Docker.DotNet.Credentials Credentials { get; }
+    public Credentials Credentials { get; }
 
     /// <inheritdoc />
     public Uri Endpoint { get; }

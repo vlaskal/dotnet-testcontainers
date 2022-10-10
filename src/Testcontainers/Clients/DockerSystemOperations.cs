@@ -21,9 +21,9 @@ namespace DotNet.Testcontainers.Clients
         .ConfigureAwait(false)).OperatingSystem.Contains("Windows");
     }
 
-    internal async Task<VersionResponse> GetVersion(CancellationToken ct = default)
+    public Task<VersionResponse> GetVersion(CancellationToken ct = default)
     {
-      return await this.Docker.System.GetVersionAsync(ct).ConfigureAwait(false);
+      return this.Docker.System.GetVersionAsync(ct);
     }
   }
 }
