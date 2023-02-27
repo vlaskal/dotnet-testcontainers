@@ -1,13 +1,12 @@
-namespace Testcontainers.Azurite.Tests
+namespace Testcontainers.Azurite;
+
+internal static class AzureResponseExtensions
 {
-  internal static class AzureResponseExtensions
-  {
     public static bool IsError<T>(this Response<T> response)
     {
-      using (var rawResponse = response.GetRawResponse())
-      {
-        return rawResponse.IsError;
-      }
+        using (var rawResponse = response.GetRawResponse())
+        {
+            return rawResponse.IsError;
+        }
     }
-  }
 }

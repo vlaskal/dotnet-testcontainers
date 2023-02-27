@@ -1,29 +1,28 @@
-namespace Testcontainers.Azurite.Tests.Fixtures
+namespace Testcontainers.Azurite;
+
+[UsedImplicitly]
+public sealed class AzuriteWithWorkspaceBindingFixture : AzuriteDefaultFixture, IDisposable
 {
-  [UsedImplicitly]
-  public sealed class AzuriteWithWorkspaceBindingFixture : AzuriteDefaultFixture, IDisposable
-  {
     public AzuriteWithWorkspaceBindingFixture()
-      : base(Setup)
+        : base(Setup)
     {
     }
 
     public void Dispose()
     {
-      var workspaceFolder = this.Container.WorkspaceLocationBinding;
-      if (workspaceFolder != null && Directory.Exists(workspaceFolder))
-      {
-        Directory.Delete(workspaceFolder, true);
-      }
+        var workspaceFolder = Container.WorkspaceLocationBinding;
+        if (workspaceFolder != null && Directory.Exists(workspaceFolder))
+        {
+            Directory.Delete(workspaceFolder, true);
+        }
     }
 
     private static AzuriteBuilder Setup(AzuriteBuilder builder)
     {
-      var workspaceLocation = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("D"));
+        var workspaceLocation = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("D"));
 
-      _ = Directory.CreateDirectory(workspaceLocation);
+        _ = Directory.CreateDirectory(workspaceLocation);
 
-      return builder.WithBindMount(workspaceLocation, AzuriteBuilder.DefaultWorkspaceDirectoryPath);
+        return builder.WithBindMount(workspaceLocation, AzuriteBuilder.DefaultWorkspaceDirectoryPath);
     }
-  }
 }

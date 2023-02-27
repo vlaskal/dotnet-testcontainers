@@ -1,7 +1,6 @@
-namespace Testcontainers.Azurite
+namespace Testcontainers.Azurite;
+
+public enum AzuriteOauthLevels
 {
-  public enum AzuriteOauthLevels
-  {
     Basic,
-  }
 }

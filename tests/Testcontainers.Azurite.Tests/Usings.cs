@@ -11,5 +11,4 @@ global using Azure.Data.Tables;
 global using Azure.Storage.Blobs;
 global using Azure.Storage.Queues;
 global using JetBrains.Annotations;
-global using Testcontainers.Azurite.Tests.Fixtures;
 global using Xunit;

@@ -1,29 +1,28 @@
-namespace Testcontainers.Azurite.Tests.Fixtures
+namespace Testcontainers.Azurite;
+
+[UsedImplicitly]
+public class AzuriteDefaultFixture : IAsyncLifetime
 {
-  [UsedImplicitly]
-  public class AzuriteDefaultFixture : IAsyncLifetime
-  {
     public AzuriteDefaultFixture()
-      : this(builder => builder)
+        : this(builder => builder)
     {
     }
 
     protected AzuriteDefaultFixture(Func<AzuriteBuilder, AzuriteBuilder> modifier)
     {
-      var builder = modifier(new AzuriteBuilder());
-      this.Container = builder.Build();
+        var builder = modifier(new AzuriteBuilder());
+        Container = builder.Build();
     }
 
     public AzuriteContainer Container { get; }
 
     public Task InitializeAsync()
     {
-      return this.Container.StartAsync();
+        return Container.StartAsync();
     }
 
     public Task DisposeAsync()
     {
-      return this.Container.DisposeAsync().AsTask();
+        return Container.DisposeAsync().AsTask();
     }
-  }
 }
